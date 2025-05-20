@@ -12,7 +12,7 @@ const CategoryItem = ({ category }) => {
                 }}
             ></div>
             <div className="category-body-container">
-                <h2>{category.title}</h2>
+                <h2>{category.title.toUpperCase()}</h2>
                 <p>Shop Now</p>
             </div>
         </div>

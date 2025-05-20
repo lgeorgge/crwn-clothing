@@ -2,12 +2,12 @@ import CategoryItem from "../category-item/category-item.component";
 import './categories.styles.scss'
 
 
-const Categories = ({ categories }) => {
+const Categories = (props) => {
 
 
     return (
         <div className="categories-container">
-            {categories.map((category) => (
+            {props.categories.map((category) => (
                 <CategoryItem key={category.id} category={category} />
             ))}
         </div>

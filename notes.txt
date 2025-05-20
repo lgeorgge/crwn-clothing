@@ -1,0 +1,2 @@
+justify content => horizontal items 
+align-items=> vertical items
