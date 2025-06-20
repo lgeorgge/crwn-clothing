@@ -1,11 +1,29 @@
 
-import { signInWithGooglePopup } from '../../utilities/firebase/firebase.util'
+import { createUserDocumentFromAuthentication, signInWithGooglePopup } from '../../utilities/firebase/firebase.util'
 
 
 const SignIn = () => {
-    const signInTOGoogle = async () => {
-        let response = await signInWithGooglePopup();
-        console.log(response);
+
+
+
+
+    const signInToGoogle = async () => {
+
+        let signingIn = false;
+        if (signingIn) return;
+        signingIn = true;
+
+        try {
+            let response = await signInWithGooglePopup();
+            createUserDocumentFromAuthentication(response.user)
+        }
+        catch (error) {
+            console.error('error in sign in', error);
+        }
+        finally {
+            signingIn = false;
+        }
+
     }
 
 
@@ -15,7 +33,7 @@ const SignIn = () => {
     return (
         <div>
             this will be sign in form
-            <button onClick={signInTOGoogle}>sign in to google</button>
+            <button onClick={signInToGoogle}>sign in to google</button>
         </div>
 
     )
