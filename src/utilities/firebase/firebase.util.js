@@ -10,6 +10,8 @@ import {
 	signInWithPopup,
 	GoogleAuthProvider,
 	User,
+	createUserWithEmailAndPassword,
+	UserCredential,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -26,14 +28,19 @@ const firebaseConfig = {
 // Initialize Firebase
 const fireBaseApp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
 	prompt: "select_account",
 });
 
-export const authentication = getAuth();
+export const authentication = getAuth(fireBaseApp);
+
 export const signInWithGooglePopup = () =>
-	signInWithPopup(authentication, provider);
+	signInWithPopup(authentication, googleProvider);
+
+export const signInWithGoogleRedirect = () => {
+	return signInWithRedirect(authentication, googleProvider);
+};
 
 export const db = getFirestore();
 
@@ -43,25 +50,46 @@ export const db = getFirestore();
  */
 
 export const createUserDocumentFromAuthentication = async (
-	userAuthentication
+	userAuthentication,
+	additionalInformation = {}
 ) => {
 	const userReference = doc(db, "users", userAuthentication.uid);
 	const userSnapshot = await getDoc(userReference);
 	console.log(userSnapshot.exists());
 
 	if (!userSnapshot.exists()) {
-		const { displayName, email, uid } = userAuthentication;
+		const { displayName, email } = userAuthentication;
 		const createdAt = new Date();
 
 		try {
 			await setDoc(userReference, {
-				uid,
 				displayName,
 				email,
 				createdAt,
+				...additionalInformation,
 			});
 		} catch (error) {
 			console.error(`error creating user document ${error}`);
 		}
 	}
+	return userReference;
+};
+
+/**
+ *
+ * @param {string} email
+ * @param {string} password
+ * @returns {UserCredential}
+ */
+
+export const createUserAuthenticationUsingEmailAndPassword = async (
+	email,
+	password
+) => {
+	if (!email || !password) return; // check if email and password are provided
+	return await createUserWithEmailAndPassword(
+		authentication,
+		email,
+		password
+	);
 };
