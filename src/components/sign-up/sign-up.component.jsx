@@ -2,6 +2,8 @@ import { createUserAuthenticationUsingEmailAndPassword, createUserDocumentFromAu
 import { useState, useEffect } from "react";
 import FormInput from "../form-input/form-input.component";
 import './sign-up.styles.scss'
+import Button from "../button/Button.component";
+
 
 
 
@@ -95,7 +97,7 @@ const SignUp = () => {
                 <span id="passwordWarning">
                     {!passwordsMatch && <span style={{ color: 'red' }}>Passwords do not match</span>}
                 </span>
-                <button type="submit" disabled={!canSubmit} >Sign up</button>
+                <Button type="submit" disabled={!canSubmit} >Sign up</Button>
             </form>
         </div>
     )

@@ -2,8 +2,9 @@ import { createUserDocumentFromAuthentication, signInWithGooglePopup, signInWith
 
 import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, } from 'react';
-
+import Button from '../../components/button/Button.component';
 import SignUp from '../../components/sign-up/sign-up.component';
+
 const SignIn = () => {
 
 
@@ -59,8 +60,12 @@ const SignIn = () => {
 
     return (
         <div>
-            <SignUp />
-            <button onClick={signInToGooglepopup}>sign in to google using popup</button>
+            <div>
+                <SignUp />
+            </div>
+            <br />
+
+            <Button buttonType={'google'} onClick={signInToGooglepopup}>sign in to google using popup</Button>
             {/* <div>
                 <button onClick={signInToGoogleRedirect}>sign in to google using redirect</button>
             </div> */}
