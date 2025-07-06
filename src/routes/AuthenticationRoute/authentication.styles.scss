@@ -1,11 +1,14 @@
-.categories-container {
-	width: 100%;
+.authentication-container {
 	display: flex;
-	flex-wrap: wrap;
 	justify-content: space-between;
+	margin: 30px auto;
+	max-width: 900px;
+	gap: 30px;
 	padding: 0 20px;
 
 	@media (max-width: 768px) {
+		flex-direction: column;
+		gap: 20px;
 		padding: 0 10px;
 	}
 }

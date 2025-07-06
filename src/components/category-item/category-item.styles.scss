@@ -8,13 +8,14 @@
 	border: 1px solid black;
 	margin: 0 7.5px 15px;
 	overflow: hidden;
+	position: relative;
 
 	&:hover {
 		cursor: pointer;
 
 		& .background-image {
 			transform: scale(1.1);
-			transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+			transition: transform 0.6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
 		}
 
 		& .category-body-container {
@@ -63,6 +64,29 @@
 		p {
 			font-weight: lighter;
 			font-size: 16px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		min-width: 45%;
+		height: 200px;
+		margin: 0 5px 10px;
+
+		&.large {
+			height: 300px;
+		}
+
+		.category-body-container {
+			height: 70px;
+			padding: 0 15px;
+
+			h2 {
+				font-size: 18px;
+			}
+
+			p {
+				font-size: 14px;
+			}
 		}
 	}
 }

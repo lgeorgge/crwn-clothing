@@ -30,6 +30,43 @@
 			background-color: #357ae8;
 			border: none;
 		}
+
+		&:disabled {
+			background-color: #ccc;
+			color: #666;
+			cursor: not-allowed;
+			border: none;
+
+			&:hover {
+				background-color: #ccc;
+				color: #666;
+				border: none;
+			}
+		}
+	}
+
+	&.default {
+		background-color: black;
+		color: white;
+
+		&:hover {
+			background-color: white;
+			color: black;
+			border: 1px solid black;
+		}
+
+		&:disabled {
+			background-color: #ccc;
+			color: #666;
+			cursor: not-allowed;
+			border: none;
+
+			&:hover {
+				background-color: #ccc;
+				color: #666;
+				border: none;
+			}
+		}
 	}
 
 	&.inverted {
@@ -42,5 +79,15 @@
 			color: white;
 			border: none;
 		}
+	}
+}
+
+@media (max-width: 768px) {
+	.button-container {
+		min-width: 140px;
+		height: 45px;
+		padding: 0 25px;
+		font-size: 14px;
+		line-height: 45px;
 	}
 }

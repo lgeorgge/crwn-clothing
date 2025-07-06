@@ -1,0 +1,43 @@
+.sign-in-container {
+	display: flex;
+	flex-direction: column;
+	width: 380px;
+
+	h2 {
+		margin: 10px 0;
+	}
+
+	span {
+		margin: 10px 0;
+	}
+
+	.buttons-container {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.error-message {
+		color: #d32f2f;
+		background-color: #ffebee;
+		border: 1px solid #f44336;
+		border-radius: 4px;
+		padding: 8px 12px;
+		margin: 10px 0;
+		font-size: 14px;
+		text-align: center;
+
+		span {
+			margin: 0;
+		}
+	}
+
+	@media (max-width: 768px) {
+		width: 100%;
+		max-width: 350px;
+
+		.buttons-container {
+			flex-direction: column;
+			gap: 10px;
+		}
+	}
+}

@@ -12,6 +12,7 @@ import {
 	User,
 	createUserWithEmailAndPassword,
 	UserCredential,
+	signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -92,4 +93,12 @@ export const createUserAuthenticationUsingEmailAndPassword = async (
 		email,
 		password
 	);
+};
+
+export const signInUserAuthenticationUsingEmailAndPassword = async (
+	email,
+	password
+) => {
+	if (!email || !password) return; // check if email and password are provided
+	return await signInWithEmailAndPassword(authentication, email, password);
 };
