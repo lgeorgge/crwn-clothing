@@ -1,11 +1,13 @@
 import { createUserAuthenticationUsingEmailAndPassword, createUserDocumentFromAuthentication, signInUserAuthenticationUsingEmailAndPassword } from "../../utilities/firebase/firebase.util";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FormInput from "../form-input/form-input.component";
 import './sign-in.styles.scss'
 import Button from "../button/Button.component";
 
 
 import { signInWithGooglePopup } from "../../utilities/firebase/firebase.util";
+import { UserContext } from "../../contexts/userContext.context";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -24,6 +26,9 @@ const SignIn = () => {
 
     const [canSubmit, setCanSubmit] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [successSignInMessage, setSuccessSignInMessage] = useState("");
+
+    const { setUser } = useContext(UserContext);
 
     useEffect(() => {
         // Only allow submit if all fields are filled and passwords match
@@ -36,6 +41,8 @@ const SignIn = () => {
             setCanSubmit(false);
         }
     }, [Email, Password,]);
+
+    const navigate = useNavigate();
 
     /**
      * @param {Event} event 
@@ -56,6 +63,12 @@ const SignIn = () => {
         try {
             let response = await signInWithGooglePopup();
             await createUserDocumentFromAuthentication(response.user);
+            setSuccessSignInMessage(`Signed in successfully\nwelcome ${response.user.displayName}`);
+            setUser(response.user);
+
+            resetFormFields();
+
+
         } catch (error) {
             console.error('error in sign in', error);
         }
@@ -75,7 +88,11 @@ const SignIn = () => {
         try {
             let response = await signInUserAuthenticationUsingEmailAndPassword(Email, Password);
             console.log('response', response);
+            setSuccessSignInMessage(`Signed in successfully\nwelcome ${response.user.displayName}`);
             resetFormFields();
+            setUser(response.user);
+            navigate('/');
+
         } catch (error) {
             console.error("error at creation, ", error);
             setErrorMessage(error.code);
@@ -94,6 +111,7 @@ const SignIn = () => {
                 <FormInput label="Email" type="email" required onChange={handleInput} name="Email" value={Email} />
                 <FormInput label="Password" type="password" required onChange={handleInput} name="Password" value={Password} />
                 {errorMessage && <div className="error-message"><span>{errorMessage}</span></div>}
+                {successSignInMessage && <div className="success-message"><span>{successSignInMessage}</span></div>}
 
                 <div className="buttons-container">
                     <Button buttonType={'default'} type="submit" disabled={!canSubmit} >Sign in</Button>

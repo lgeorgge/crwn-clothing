@@ -1,9 +1,10 @@
 import { createUserAuthenticationUsingEmailAndPassword, createUserDocumentFromAuthentication } from "../../utilities/firebase/firebase.util";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FormInput from "../form-input/form-input.component";
 import './sign-up.styles.scss'
 import Button from "../button/Button.component";
-
+import { UserContext } from '../../contexts/userContext.context'
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -24,6 +25,10 @@ const SignUp = () => {
     const { DisplayName, Email, Password, ConfirmPassword } = FormFields;//destructuring
 
     const [canSubmit, setCanSubmit] = useState(false);
+
+    const { setUser } = useContext(UserContext);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Only allow submit if all fields are filled and passwords match
@@ -68,7 +73,10 @@ const SignUp = () => {
             const response = await createUserAuthenticationUsingEmailAndPassword(Email, Password);
             console.log(response.user);
             await createUserDocumentFromAuthentication(response.user, { displayName: DisplayName });
+            setUser(response.user);
             clearForm();
+            navigate('/');
+
 
 
         } catch (error) {
