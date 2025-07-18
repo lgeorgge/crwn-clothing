@@ -8,12 +8,9 @@ import { signOutUser } from "../../utilities/firebase/firebase.util";
 
 
 const NavigationBar = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
-    const signOutUserHandler = async () => {
-        await signOutUser();
-        setUser(null);
-    }
+    
 
 
     return (
@@ -23,11 +20,12 @@ const NavigationBar = () => {
                     <CrwnLogo />
                 </Link>
                 <div className="nav-links-container">
-                    <Link className="nav-link">this will be link to shop</Link>
+                    
 
-                    {user ? (<span className="nav-link" onClick={signOutUserHandler}> Sign out</span>) : (<Link to='/Account' className="nav-link">Sign-In</Link>)}
+                    {user ? (<span className="nav-link" onClick={signOutUser}> Sign out</span>) : (<Link to='/Account' className="nav-link">Sign-In</Link>)}
 
                     <Link to='/trial' className="nav-link">try this calculator</Link>
+                    <Link to='/Shop' className="nav-link">Shop</Link>
                 </div>
             </div>
             <Outlet />

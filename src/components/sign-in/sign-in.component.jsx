@@ -28,7 +28,7 @@ const SignIn = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [successSignInMessage, setSuccessSignInMessage] = useState("");
 
-    const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Only allow submit if all fields are filled and passwords match
@@ -42,7 +42,7 @@ const SignIn = () => {
         }
     }, [Email, Password,]);
 
-    const navigate = useNavigate();
+    
 
     /**
      * @param {Event} event 
@@ -62,9 +62,9 @@ const SignIn = () => {
     const signInWithGoogle = async () => {
         try {
             let response = await signInWithGooglePopup();
-            await createUserDocumentFromAuthentication(response.user);
+            
             setSuccessSignInMessage(`Signed in successfully\nwelcome ${response.user.displayName}`);
-            setUser(response.user);
+            navigate('/');
 
             resetFormFields();
 
@@ -87,10 +87,8 @@ const SignIn = () => {
         }
         try {
             let response = await signInUserAuthenticationUsingEmailAndPassword(Email, Password);
-            console.log('response', response);
             setSuccessSignInMessage(`Signed in successfully\nwelcome ${response.user.displayName}`);
             resetFormFields();
-            setUser(response.user);
             navigate('/');
 
         } catch (error) {
