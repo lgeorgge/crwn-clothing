@@ -1,2 +1,12 @@
 justify content => horizontal items 
 align-items=> vertical items
+
+
+
+Tag	        Usage	                                            Example
+@param	    Describes a function parameter. 	                @param {string} name - The user's name.
+@returns	Describes the return value.     	                @returns {number} The calculated result.
+@typedef	Defines a custom type.	                            @typedef {Object} User
+@property	Describes an object property (used with @typedef).	@property {string} name - The user's name.
+@throws	    Documents possible errors.                      	@throws {Error} If input is invalid.
+@example	Shows a usage example.	                            @example const result = add(2, 3);
