@@ -3,9 +3,14 @@ import './cart-dropdown.styless.scss';
 import { useContext, useState } from 'react';
 import { CartContext } from '../../contexts/cartContext.context';
 import CartItem from '../cart-item/cart-item.component';
+import { useNavigate } from 'react-router-dom';
+
 
 const CartDropdown = () => {
     const { cartItems } = useContext(CartContext);
+    const navigate = useNavigate();
+
+
 
 
 
@@ -19,8 +24,6 @@ const CartDropdown = () => {
                         (<div>
                             {Array.from(cartItems).map(([item, quantity]) =>
                                 (<CartItem key={item.id} item={item} quantity={quantity} />))}
-
-
                         </div>)
                 }
                 <div>
@@ -28,7 +31,7 @@ const CartDropdown = () => {
 
             </div>
 
-            <Button buttonType='inverted'>Go to checkout</Button>
+            <Button buttonType='inverted' onClick={() => navigate('/checkout')}>Go to checkout</Button>
 
         </div>
     )

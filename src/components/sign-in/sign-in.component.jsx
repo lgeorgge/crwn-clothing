@@ -42,7 +42,7 @@ const SignIn = () => {
         }
     }, [Email, Password,]);
 
-    
+
 
     /**
      * @param {Event} event 
@@ -62,7 +62,7 @@ const SignIn = () => {
     const signInWithGoogle = async () => {
         try {
             let response = await signInWithGooglePopup();
-            
+
             setSuccessSignInMessage(`Signed in successfully\nwelcome ${response.user.displayName}`);
             navigate('/');
 
@@ -113,7 +113,7 @@ const SignIn = () => {
 
                 <div className="buttons-container">
                     <Button buttonType={'default'} type="submit" disabled={!canSubmit} >Sign in</Button>
-                    <Button buttonType={'google'} onClick={signInWithGoogle} type='button' >Sign in with Google</Button>
+                    <Button buttonType={'google'} onClick={() => signInWithGoogle()} type='button' >Sign in with Google</Button>
                 </div>
             </form>
         </div>
