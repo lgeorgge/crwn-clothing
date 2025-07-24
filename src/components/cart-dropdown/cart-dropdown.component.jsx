@@ -23,6 +23,7 @@ const CartDropdown = () => {
                         :
                         (<div>
                             {Array.from(cartItems).map(([item, quantity]) =>
+
                                 (<CartItem key={item.id} item={item} quantity={quantity} />))}
                         </div>)
                 }

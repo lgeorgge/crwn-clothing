@@ -9,6 +9,11 @@ export const CartContext = createContext(
         addItemToCart: (itemToBeAdded) => { },
         numberOfItems: 0,
         incrementNumberOfItems: () => { },
+        decrementNumberOfItems: () => { },
+
+        decrementItemFromCart: (itemToBeDecremented) => { },
+        removeItemFromCart: (itemToBeRemoved) => { },
+
 
     }
 );
@@ -34,14 +39,58 @@ export const CartProvider = ({ children }) => {
         });
     };
 
+
+
+    const removeItemFromCart = (itemToBeRemoved) => {
+        let quantityToBeRemovedFromCartIcon = 0;
+
+        setCartItems(prevCartItems => {
+            const updatedCart = new Map(prevCartItems);
+
+            quantityToBeRemovedFromCartIcon = updatedCart.get(itemToBeRemoved)
+
+            //then delete the item
+
+            updatedCart.delete(itemToBeRemoved);
+            return updatedCart;
+        })
+
+        setNumberOfItems(previousValue => Math.max(0, previousValue - quantityToBeRemovedFromCartIcon))
+
+    }
+
+    const decrementItemFromCart = (itemToBeDecremented) => {
+        setCartItems(prevCartItems => {
+            const updatedCart = new Map(prevCartItems);
+            const currentQty = updatedCart.get(itemToBeDecremented) || 0;
+            if (currentQty === 1) {
+                updatedCart.delete(itemToBeDecremented)
+            } else {
+                updatedCart.set(itemToBeDecremented, currentQty - 1);
+            }
+            return updatedCart;
+
+
+        })
+
+    }
+
     const incrementNumberOfItems = () => {
         setNumberOfItems(previousNumber => previousNumber + 1);
+    }
+    const decrementNumberOfItems = () => {
+
+        setNumberOfItems(previousNumber => previousNumber == 0 ? 0 : previousNumber - 1);
     }
 
 
 
 
-    const value = { isCartOpen, setIsCartOpen, addItemToCart, cartItems, numberOfItems, incrementNumberOfItems }
+    const value = {
+        isCartOpen, setIsCartOpen, addItemToCart, cartItems, numberOfItems
+        , incrementNumberOfItems, removeItemFromCart, decrementItemFromCart,
+        decrementNumberOfItems
+    }
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
     )
