@@ -18,9 +18,9 @@ const CheckoutItem = ({ cartItem, quantity }) => {
                 {name}
             </span>
             <span className='quantity'>
-                <span className='arrow' onClick={() => { decrementItemFromCart(cartItem); decrementNumberOfItems(); }}>&lt;</span>
-                {quantity}
-                <span className='arrow' onClick={() => { addItemToCart(cartItem); incrementNumberOfItems(); }}>&gt; </span>
+                <div className='arrow' onClick={() => { decrementItemFromCart(cartItem); decrementNumberOfItems(); }}>&#10094;</div>
+                <span className='value'>{quantity}</span>
+                <div className='arrow' onClick={() => { addItemToCart(cartItem); incrementNumberOfItems(); }}>&#10095; </div>
 
             </span>
             <span className='price'>

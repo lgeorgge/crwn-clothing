@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import CartItem from "../components/cart-item/cart-item.component";
 
 export const CartContext = createContext(
@@ -14,6 +14,8 @@ export const CartContext = createContext(
         decrementItemFromCart: (itemToBeDecremented) => { },
         removeItemFromCart: (itemToBeRemoved) => { },
 
+        cartTotal: 0
+
 
     }
 );
@@ -22,6 +24,19 @@ export const CartProvider = ({ children }) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems, setCartItems] = useState(new Map());
     const [numberOfItems, setNumberOfItems] = useState(0);
+    const [cartTotal, setCartTotal] = useState(0);
+
+
+    useEffect(() => {
+        const newCartTotal = Array.from(cartItems).reduce(
+            (total, [cartItem, quantity]) => {
+                return total + cartItem.price * quantity;
+            },
+            0
+        );
+        setCartTotal(newCartTotal);
+    }, [cartItems]);
+
 
 
     /**
@@ -80,7 +95,7 @@ export const CartProvider = ({ children }) => {
     }
     const decrementNumberOfItems = () => {
 
-        setNumberOfItems(previousNumber => previousNumber == 0 ? 0 : previousNumber - 1);
+        setNumberOfItems(previousNumber => previousNumber === 0 ? 0 : previousNumber - 1);
     }
 
 
@@ -89,7 +104,7 @@ export const CartProvider = ({ children }) => {
     const value = {
         isCartOpen, setIsCartOpen, addItemToCart, cartItems, numberOfItems
         , incrementNumberOfItems, removeItemFromCart, decrementItemFromCart,
-        decrementNumberOfItems
+        decrementNumberOfItems, cartTotal
     }
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
