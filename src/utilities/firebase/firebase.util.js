@@ -16,7 +16,16 @@ import {
 	signOut,
 	onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+	getFirestore,
+	doc,
+	getDoc,
+	setDoc,
+	collection,
+	writeBatch,
+	query,
+	getDocs,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -48,11 +57,52 @@ export const signInWithGoogleRedirect = () => {
 export const db = getFirestore();
 
 /**
+ * @param {[]} ObjectsToBeAdded
+ * @param {string} collectionKey
+ *
+ */
+export const createCollectionAndItsDocuments = async (
+	collectionKey,
+	ObjectsToBeAdded,
+	field,
+	database = db
+) => {
+	const collectionRef = collection(database, collectionKey);
+	const batch = writeBatch(database);
+
+	ObjectsToBeAdded.forEach((item) => {
+		const docRef = doc(collectionRef, item[field].toLowerCase());
+		batch.set(docRef, item);
+	});
+	return await batch.commit();
+};
+
+export const getCollectionFromDB = async (
+	collectionKey = "categories",
+	database = db
+) => {
+	const collectionRef = collection(database, collectionKey);
+	const myQuery = query(collectionRef);
+	const querySnapshot = await getDocs(myQuery);
+	const collectionKeyMap = querySnapshot.docs.reduce(
+		(accumulator, dataItem) => {
+			const data = dataItem.data();
+			const { title, items } = data;
+			accumulator[title.toLowerCase()] = items;
+			return accumulator;
+		},
+		{}
+	);
+	return collectionKeyMap;
+};
+
+/**
  *
  * @param  {User} userAuthentication
  */
 
-export const createUserDocumentFromAuthentication = async ( // creates document equals adding a user to the database
+export const createUserDocumentFromAuthentication = async (
+	// creates document equals adding a user to the database
 	userAuthentication,
 	additionalInformation = {}
 ) => {
@@ -105,7 +155,6 @@ export const signInUserAuthenticationUsingEmailAndPassword = async (
 };
 
 export const signOutUser = async () => await signOut(authentication);
-
 
 export const onAuthStateChangedListener = (callback) =>
 	onAuthStateChanged(authentication, callback);

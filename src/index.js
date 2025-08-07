@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./contexts/userContext.context";
-import { ProductsProvider } from "./contexts/productsContext.component";
+import { CategoriesProvider } from "./contexts/categoriesContext.context";
 import {
 	CartContextProvider,
 	CartProvider,
@@ -16,12 +16,12 @@ root.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<UserProvider>
-				<ProductsProvider>
+				<CategoriesProvider>
 					<CartProvider>
 						<App />
 					</CartProvider>
 					{/* Wrapping App with UserProvider and ProductsProvider to provide context to the entire app */}
-				</ProductsProvider>
+				</CategoriesProvider>
 			</UserProvider>
 		</BrowserRouter>
 	</React.StrictMode>
