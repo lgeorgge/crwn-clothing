@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import CartItem from "../components/cart-item/cart-item.component";
 
 export const CartContext = createContext(
@@ -21,12 +21,35 @@ export const CartContext = createContext(
 );
 
 
-export const CartProvider = ({ children }) => {
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [cartItems, setCartItems] = useState(new Map());
-    const [numberOfItems, setNumberOfItems] = useState(0);
-    const [cartTotal, setCartTotal] = useState(0);
+const CART_ACTION_TYPES = {
+    SET_IS_CART_OPEN: 'SET_IS_CART_OPEN',
+    SET_CART_STATE: 'SET_CART_STATE',
+    SET_CART_TOTAL: 'SET_CART_TOTAL',
+};
 
+const INITIAL_STATE = {
+    isCartOpen: false,
+    cartItems: new Map(),
+    numberOfItems: 0,
+    cartTotal: 0,
+};
+
+function cartReducer(state, action) {
+    switch (action.type) {
+        case CART_ACTION_TYPES.SET_IS_CART_OPEN:
+            return { ...state, isCartOpen: action.payload };
+        case CART_ACTION_TYPES.SET_CART_STATE:
+            return { ...state, ...action.payload };
+        case CART_ACTION_TYPES.SET_CART_TOTAL:
+            return { ...state, cartTotal: action.payload };
+        default:
+            return state;
+    }
+}
+
+export const CartProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+    const { isCartOpen, cartItems, numberOfItems, cartTotal } = state;
 
     useEffect(() => {
         const newCartTotal = Array.from(cartItems).reduce(
@@ -35,81 +58,89 @@ export const CartProvider = ({ children }) => {
             },
             0
         );
-        setCartTotal(newCartTotal);
+        dispatch({ type: CART_ACTION_TYPES.SET_CART_TOTAL, payload: newCartTotal });
     }, [cartItems]);
 
-
-
-    /**
-     * 
-     * @param {Map} CartItems
-     * @returns {void}
-     */
+    const setIsCartOpen = (bool) => {
+        dispatch({ type: CART_ACTION_TYPES.SET_IS_CART_OPEN, payload: bool });
+    };
 
     const addItemToCart = (itemToBeAdded) => {
-        setCartItems(prevCartItems => {
-            const updatedCart = new Map(prevCartItems);
-            const currentQty = updatedCart.get(itemToBeAdded) || 0;
-            updatedCart.set(itemToBeAdded, currentQty + 1);
-            return updatedCart;
+        const updatedCart = new Map(cartItems);
+        const currentQty = updatedCart.get(itemToBeAdded) || 0;
+        updatedCart.set(itemToBeAdded, currentQty + 1);
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_STATE,
+            payload: {
+                cartItems: updatedCart,
+                numberOfItems: numberOfItems + 1,
+            },
         });
     };
 
-
-
     const removeItemFromCart = (itemToBeRemoved) => {
-        let quantityToBeRemovedFromCartIcon = 0;
-
-        setCartItems(prevCartItems => {
-            const updatedCart = new Map(prevCartItems);
-
-            quantityToBeRemovedFromCartIcon = updatedCart.get(itemToBeRemoved)
-
-            //then delete the item
-
-            updatedCart.delete(itemToBeRemoved);
-            return updatedCart;
-        })
-
-        setNumberOfItems(previousValue => Math.max(0, previousValue - quantityToBeRemovedFromCartIcon))
-
-    }
+        const updatedCart = new Map(cartItems);
+        const quantityToBeRemoved = updatedCart.get(itemToBeRemoved) || 0;
+        updatedCart.delete(itemToBeRemoved);
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_STATE,
+            payload: {
+                cartItems: updatedCart,
+                numberOfItems: Math.max(0, numberOfItems - quantityToBeRemoved),
+            },
+        });
+    };
 
     const decrementItemFromCart = (itemToBeDecremented) => {
-        setCartItems(prevCartItems => {
-            const updatedCart = new Map(prevCartItems);
-            const currentQty = updatedCart.get(itemToBeDecremented) || 0;
-            if (currentQty === 1) {
-                updatedCart.delete(itemToBeDecremented)
-            } else {
-                updatedCart.set(itemToBeDecremented, currentQty - 1);
-            }
-            return updatedCart;
-
-
-        })
-
-    }
+        const updatedCart = new Map(cartItems);
+        const currentQty = updatedCart.get(itemToBeDecremented) || 0;
+        if (currentQty === 1) {
+            updatedCart.delete(itemToBeDecremented);
+        } else if (currentQty > 1) {
+            updatedCart.set(itemToBeDecremented, currentQty - 1);
+        }
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_STATE,
+            payload: {
+                cartItems: updatedCart,
+                numberOfItems: numberOfItems > 0 ? numberOfItems - 1 : 0,
+            },
+        });
+    };
 
     const incrementNumberOfItems = () => {
-        setNumberOfItems(previousNumber => previousNumber + 1);
-    }
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_STATE,
+            payload: {
+                numberOfItems: numberOfItems + 1,
+            },
+        });
+    };
+
     const decrementNumberOfItems = () => {
-
-        setNumberOfItems(previousNumber => previousNumber === 0 ? 0 : previousNumber - 1);
-    }
-
-
-
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_STATE,
+            payload: {
+                numberOfItems: numberOfItems === 0 ? 0 : numberOfItems - 1,
+            },
+        });
+    };
 
     const value = {
-        isCartOpen, setIsCartOpen, addItemToCart, cartItems, numberOfItems
-        , incrementNumberOfItems, removeItemFromCart, decrementItemFromCart,
-        decrementNumberOfItems, cartTotal
-    }
+        isCartOpen,
+        setIsCartOpen,
+        addItemToCart,
+        cartItems,
+        numberOfItems,
+        incrementNumberOfItems,
+        removeItemFromCart,
+        decrementItemFromCart,
+        decrementNumberOfItems,
+        cartTotal,
+    };
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
-    )
-}
+    );
+};
 
 //cartItems.set(itemToBeAdded, cartItems.get(itemToBeAdded) + 1)
