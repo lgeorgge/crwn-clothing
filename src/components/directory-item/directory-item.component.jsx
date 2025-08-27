@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import './directory-item.styles.scss'
 
 const DirectoryItem = ({ category }) => {
+    const nav = useNavigate();
 
 
     return (
@@ -11,9 +13,9 @@ const DirectoryItem = ({ category }) => {
                     backgroundImage: `url(${category.imageUrl})`,
                 }}
             ></div>
-            <div className="directory-body-container">
+            <div onClick={() => nav(`/shop/${category.title}`)} className="directory-body-container">
                 <h2>{category.title.toUpperCase()}</h2>
-                <p>Shop Now</p>
+                <p >Shop Now</p>
             </div>
         </div>
     )

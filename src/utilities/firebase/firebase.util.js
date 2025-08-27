@@ -84,16 +84,9 @@ export const getCollectionFromDB = async (
 	const collectionRef = collection(database, collectionKey);
 	const myQuery = query(collectionRef);
 	const querySnapshot = await getDocs(myQuery);
-	const collectionKeyMap = querySnapshot.docs.reduce(
-		(accumulator, dataItem) => {
-			const data = dataItem.data();
-			const { title, items } = data;
-			accumulator[title.toLowerCase()] = items;
-			return accumulator;
-		},
-		{}
+	return new Map(
+		Object.entries(querySnapshot.docs.map((snapshot) => snapshot.data()))
 	);
-	return collectionKeyMap;
 };
 
 /**
