@@ -3,10 +3,13 @@ import { createSelector } from "reselect";
 
 const selectCartReducer = (state) => state.cart;
 
-export const selectCartItems = createSelector(
-	[selectCartReducer],
-	(cart) => cart.cartItems
-);
+export const selectCartItems = createSelector([selectCartReducer], (cart) => {
+	const items = cart.cartItems;
+	if (items instanceof Map) return items;
+	if (items && typeof items === "object")
+		return new Map(Object.entries(items));
+	return new Map();
+});
 
 export const selectIsCartOpen = createSelector(
 	[selectCartReducer],
