@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
@@ -21,9 +22,9 @@ root.render(
 			<BrowserRouter>
 				{/* <UserProvider> */}
 				{/* <CategoriesProvider> */}
-				<CartProvider>
-					<App />
-				</CartProvider>
+				{/* <CartProvider> */}
+				<App />
+				{/* </CartProvider> */}
 				{/* Wrapping App with UserProvider and ProductsProvider to provide context to the entire app */}
 				{/* </CategoriesProvider> */}
 				{/* </UserProvider> */}

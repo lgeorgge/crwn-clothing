@@ -1,13 +1,28 @@
+// @ts-nocheck
 import './checkout-item.styles.scss'
 
 import { useContext } from 'react';
 import { CartContext } from '../../contexts/cartContext.context';
 
 
+import { useSelector, useDispatch } from '../../../node_modules/react-redux/dist/react-redux';
+
+import { addItemToCart, removeItemFromCart, decrementItemFromCart } from './../../store/cart/cart.action'
+
+import { selectCartItems, CartCount, selectCartTotal, } from '../../store/cart/cart.selector';
+
+
 const CheckoutItem = ({ cartItem, quantity }) => {
 
-    const { addItemToCart, decrementItemFromCart,
-        removeItemFromCart, decrementNumberOfItems, incrementNumberOfItems } = useContext(CartContext);
+    const dispatch = useDispatch();
+    const cartItems = useSelector(selectCartItems);
+
+
+
+
+
+
+
     const { name, imageUrl, price } = cartItem;
     return (
         <div className="checkout-item-container">
@@ -18,15 +33,15 @@ const CheckoutItem = ({ cartItem, quantity }) => {
                 {name}
             </span>
             <span className='quantity'>
-                <div className='arrow' onClick={() => { decrementItemFromCart(cartItem); decrementNumberOfItems(); }}>&#10094;</div>
+                <div className='arrow' onClick={() => { dispatch(decrementItemFromCart(cartItems, cartItem)) }}>&#10094;</div>
                 <span className='value'>{quantity}</span>
-                <div className='arrow' onClick={() => { addItemToCart(cartItem); incrementNumberOfItems(); }}>&#10095; </div>
+                <div className='arrow' onClick={() => { dispatch(addItemToCart(cartItems, cartItem)) }}>&#10095; </div>
 
             </span>
             <span className='price'>
                 {price}
             </span>
-            <div className='remove-button' onClick={() => removeItemFromCart(cartItem)}>&#10005;</div>
+            <div className='remove-button' onClick={() => dispatch(removeItemFromCart(cartItems, cartItem))}>&#10005;</div>
         </div>
     )
 

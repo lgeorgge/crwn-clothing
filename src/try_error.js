@@ -182,24 +182,33 @@ function fetchData() {
 
 // console.log(longestPalindrome("babad"));
 
-/**
- * @param {number} x
- * @return {number}
- */
-var reverse = function (x) {
-	if (x > Math.pow(2, 31) - 1) return 0;
-	let isNegative = x < 0 ? true : false;
-	x = Math.abs(x);
-	let result = 0;
-	while (x > 0) {
-		result *= 10;
-		result += x % 10;
-		x = Math.floor(x / 10);
-	}
-	return isNegative ? -result : result;
-};
+// /**
+//  * @param {number} x
+//  * @return {number}
+//  */
+// var reverse = function (x) {
+// 	if (x > Math.pow(2, 31) - 1) return 0;
+// 	let isNegative = x < 0 ? true : false;
+// 	x = Math.abs(x);
+// 	let result = 0;
+// 	while (x > 0) {
+// 		result *= 10;
+// 		result += x % 10;
+// 		x = Math.floor(x / 10);
+// 	}
+// 	return isNegative ? -result : result;
+// };
 
-// console.log(reverse(-14547));
-//1534236469
-console.log(Math.pow(2, 31) - 1);
-console.log(1534236469);
+// // console.log(reverse(-14547));
+// //1534236469
+// console.log(Math.pow(2, 31) - 1);
+// console.log(1534236469);
+
+const m = new Map();
+m.set("jacket", 800);
+m.set("shoes", 600);
+m.set("liquid", 250);
+
+var num2 = Array.from(m).length;
+
+console.log(num2);

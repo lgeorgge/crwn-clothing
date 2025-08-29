@@ -1,10 +1,11 @@
 import { createUserAuthenticationUsingEmailAndPassword, createUserDocumentFromAuthentication } from "../../utilities/firebase/firebase.util";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, use } from "react";
 import FormInput from "../form-input/form-input.component";
 import './sign-up.styles.scss'
 import Button from "../button/Button.component";
-import { UserContext } from '../../contexts/userContext.context'
 import { useNavigate } from "react-router-dom";
+import { setCurrentUser } from "../../store/user/user.action";
+import { useDispatch } from "../../../node_modules/react-redux/dist/react-redux";
 
 
 
@@ -26,7 +27,8 @@ const SignUp = () => {
 
     const [canSubmit, setCanSubmit] = useState(false);
 
-    const { setUser } = useContext(UserContext);
+    const dispatch = useDispatch();
+
 
     const navigate = useNavigate();
 
@@ -73,7 +75,7 @@ const SignUp = () => {
             const response = await createUserAuthenticationUsingEmailAndPassword(Email, Password);
             console.log(response.user);
             await createUserDocumentFromAuthentication(response.user, { displayName: DisplayName });
-            setUser(response.user);
+            dispatch(setCurrentUser(response.user));
             clearForm();
             navigate('/');
 

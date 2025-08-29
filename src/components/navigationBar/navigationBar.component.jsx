@@ -3,12 +3,13 @@ import { Fragment, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as CrwnLogo } from '../../assets/crown.svg'
 import './navigationBar.styles.scss'
-import { UserContext } from "../../contexts/userContext.context";
 import { CartContext } from "../../contexts/cartContext.context";
 import { signOutUser } from "../../utilities/firebase/firebase.util";
 import CartIcon from "../cart-icon/cart-icon.component";
 import CartDropdown from "../cart-dropdown/cart-dropdown.component";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "../../../node_modules/react-redux/dist/react-redux";
+
+import { selectIsCartOpen } from "../../store/cart/cart.selector";
 
 
 const NavigationBar = () => {
@@ -17,7 +18,11 @@ const NavigationBar = () => {
 
     const user = useSelector((state) => state.user.user)
 
-    const { isCartOpen } = useContext(CartContext);
+    // const { isCartOpen } = useContext(CartContext);
+
+    const isCartOpen = useSelector(selectIsCartOpen)
+
+
 
 
 
